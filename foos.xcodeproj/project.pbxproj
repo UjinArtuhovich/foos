@@ -38,6 +38,9 @@
 		6DD1BF4B2899E148000D0357 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1BF4A2899E148000D0357 /* NewsView.swift */; };
 		6DD1BF4E2899E2DD000D0357 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6DD1BF4D2899E2DD000D0357 /* Kingfisher */; };
 		6DD1BF512899E4AD000D0357 /* BonMot in Frameworks */ = {isa = PBXBuildFile; productRef = 6DD1BF502899E4AD000D0357 /* BonMot */; };
+		6DD1BF53289A8ADD000D0357 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1BF52289A8ADD000D0357 /* SettingsFeature.swift */; };
+		6DD1BF55289A8AE7000D0357 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1BF54289A8AE7000D0357 /* SettingsViewController.swift */; };
+		6DD1BF57289A8AF5000D0357 /* SettingsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1BF56289A8AF5000D0357 /* SettingsConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +92,9 @@
 		6DD1BF402899DA84000D0357 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		6DD1BF482899DF31000D0357 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		6DD1BF4A2899E148000D0357 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
+		6DD1BF52289A8ADD000D0357 /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
+		6DD1BF54289A8AE7000D0357 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		6DD1BF56289A8AF5000D0357 /* SettingsConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +287,9 @@
 		6DD1BF462899DDBA000D0357 /* SettingsFeature */ = {
 			isa = PBXGroup;
 			children = (
+				6DD1BF56289A8AF5000D0357 /* SettingsConstants.swift */,
+				6DD1BF52289A8ADD000D0357 /* SettingsFeature.swift */,
+				6DD1BF54289A8AE7000D0357 /* SettingsViewController.swift */,
 			);
 			path = SettingsFeature;
 			sourceTree = "<group>";
@@ -450,13 +459,16 @@
 				6D0DF617289969D6007971B9 /* AppConstants.swift in Sources */,
 				6DD1BF3C2899BF55000D0357 /* MainLoadingConstants.swift in Sources */,
 				6D0DF626289972F4007971B9 /* MainFeature.swift in Sources */,
+				6DD1BF53289A8ADD000D0357 /* SettingsFeature.swift in Sources */,
 				6D0DF619289969E8007971B9 /* AppViewController.swift in Sources */,
 				6DD1BF3E2899BF63000D0357 /* MainLoadingViewController.swift in Sources */,
 				6D0DF62D2899739F007971B9 /* TabBarView.swift in Sources */,
+				6DD1BF57289A8AF5000D0357 /* SettingsConstants.swift in Sources */,
 				6D0DF63628998C57007971B9 /* Store+Stateless.swift in Sources */,
 				6DD1BF492899DF31000D0357 /* News.swift in Sources */,
 				6D0DF5E728996237007971B9 /* SceneDelegate.swift in Sources */,
 				6DD1BF2F2899B8FC000D0357 /* UIViewController+Child.swift in Sources */,
+				6DD1BF55289A8AE7000D0357 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

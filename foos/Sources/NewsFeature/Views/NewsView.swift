@@ -8,12 +8,15 @@
 import UIKit
 import Kingfisher
 import SnapKit
+import BonMot
 
 final public class NewsView: UIView {
     // MARK: - Private properties
-    private var newsImageView: UIView!
+    private var newsImageView: UIImageView!
     private var titleLabel: UILabel!
-    private var descriptionLabel: UILabel!
+    private var typeView: UIView!
+    private var typeLabel: UILabel!
+    private var descriptionLabel: UITextView!
     
     // MARK: - Public properties
     public var model: News? {
@@ -21,6 +24,12 @@ final public class NewsView: UIView {
             guard let model = model else {
                 return
             }
+            
+            titleLabel.styledText = model.title
+            typeLabel.styledText = Constants.hashtag + model.type
+            guard let imageUrl = URL(string: model.imageUrl) else { return }
+            
+            newsImageView?.kf.setImage(with: imageUrl)
         }
     }
     
@@ -40,6 +49,8 @@ private extension NewsView {
     func commonInit() {
         newsImageView = .init()
         newsImageView.backgroundColor = .Custom.accent
+        newsImageView.clipsToBounds = true
+        newsImageView.contentMode = .scaleAspectFill
         
         addSubview(newsImageView)
         
@@ -51,11 +62,57 @@ private extension NewsView {
             make.height.equalTo(self.snp.width)
         }
         
+        titleLabel = .init()
+        titleLabel.numberOfLines = 0
+        titleLabel.bonMotStyle = Constants.titleTextStyle
+        
+        addSubview(titleLabel)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalTo(newsImageView.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().offset(-2)
+        }
+        
+        typeLabel = .init()
+        typeLabel.bonMotStyle = Constants.typeTextStyle
+        
+        addSubview(typeLabel)
+        
+        typeLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.leading.equalTo(newsImageView.snp.trailing).offset(10)
+        }
+        
+        typeView = .init()
+        typeView.backgroundColor = .Custom.accent.withAlphaComponent(0.1)
+        typeView.layer.cornerRadius = Constants.typeCornerRadius
+        
+        addSubview(typeView)
+        
+        typeView.snp.makeConstraints { make in
+            make.centerX.centerY.equalTo(typeLabel)
+            make.width.height.equalTo(typeLabel).offset(5)
+        }
     }
 }
 
 private extension NewsView {
     // MARK: - Constants
     struct Constants {
+        static let hashtag = "#"
+        static let typeCornerRadius: CGFloat = 7
+        static let titleTextStyle = StringStyle([
+            .font(.systemFont(ofSize: 24, weight: .bold)),
+            .color(.black)
+        ])
+        static let typeTextStyle = StringStyle([
+            .font(.systemFont(ofSize: 16, weight: .regular)),
+            .color(.black)
+        ])
+        static let descriptionTextStyle = StringStyle([
+            .font(.systemFont(ofSize: 12, weight: .light)),
+            .color(.black)
+        ])
     }
 }

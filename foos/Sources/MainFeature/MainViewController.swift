@@ -80,23 +80,23 @@ private extension MainViewController {
             
             switch section {
             case .news:
-                let store = store.scope(state: \.newsState, action: MainAction.newsAction)
+                let store = store.scope(state: \.newsState, action: MainAction.news)
                 vc = NewsViewController(store: store)
                 
             case .myLooks:
-                let store = store.scope(state: \.newsState, action: MainAction.newsAction)
+                let store = store.scope(state: \.newsState, action: MainAction.news)
                 vc = NewsViewController(store: store)
                 
             case .shop:
-                let store = store.scope(state: \.newsState, action: MainAction.newsAction)
+                let store = store.scope(state: \.newsState, action: MainAction.news)
                 vc = NewsViewController(store: store)
                 
             case .profile:
-                let store = store.scope(state: \.newsState, action: MainAction.newsAction)
+                let store = store.scope(state: \.newsState, action: MainAction.news)
                 vc = NewsViewController(store: store)
                  
             case .test:
-                let store = store.scope(state: \.newsState, action: MainAction.newsAction)
+                let store = store.scope(state: \.newsState, action: MainAction.news)
                 vc = NewsViewController(store: store)
             }
             
@@ -134,9 +134,34 @@ private extension MainViewController {
                 self.tabBarView.selectedSection = value.rawValue
             }
             .store(in: &self.cancellables)
+        
+        viewStore.publisher.route
+            .sink { [weak self] value in
+                guard let self = self else {
+                    return
+                }
+                
+                switch value {
+                case .settings:
+                    self.store.scope(state: \.settingsState, action: MainAction.settings)
+                        .ifLet { [weak self] in
+                            self?.navigationController?.pushViewController(SettingsViewController(store: $0), animated: true)
+                        }
+                        .store(in: &self.cancellables)
+                
+                case .none:
+                    if self.navigationController?.viewControllers.last != self {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    
+                    self.dismiss(animated: true)
+                }
+            }
+            .store(in: &self.cancellables)
     }
     
     @objc func didTapSettingsBarButton() {
+        viewStore.send(.didTapSettingsBarButton)
     }
 }
 

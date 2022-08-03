@@ -78,7 +78,7 @@ extension NewsViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsConstants.newsCellReuseId, for: indexPath) as? NewsTableViewCell else { return .init() }
-        
+        cell.model = .init(title: "Fashion", text: "В этокаждого человека без исключения", id: 1, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/92/Etalage_van_modewinkel_-_Window_of_a_fashion_boutique_%286808272877%29.jpg", type: "summer")
         return cell
     }
 }

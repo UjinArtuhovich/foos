@@ -15,6 +15,8 @@ final public class MainLoadingViewController: UIViewController {
     private let viewStore: ViewStore<MainLoadingState, MainLoadingAction>
     private var cancellables: Set<AnyCancellable> = []
     
+    private var logoView: UIView!
+    
     // MARK: - Init
     public init(store: Store<MainLoadingState, MainLoadingAction>) {
         self.store = store
@@ -35,6 +37,12 @@ final public class MainLoadingViewController: UIViewController {
         
         setupItems()
     }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        animateLogoView()
+    }
 }
 
 private extension MainLoadingViewController {
@@ -49,6 +57,55 @@ private extension MainLoadingViewController {
     }
     
     func setupVS() {
+        logoView = .init()
+        logoView.backgroundColor = .Custom.backgroundBar
+        
+        view.addSubview(logoView)
+        
+        logoView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.width.height.equalTo(MainLoadingConstants.logoViewSize)
+        }
+        
+        logoView.layer.cornerRadius = MainLoadingConstants.logoViewSize / 2
+    }
+    
+    func animateLogoView() {
+        UIView.animateKeyframes(withDuration: MainLoadingConstants.loadingDuration, delay: 0) { [weak self] in
+            guard let self = self else { return }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) {
+                self.logoView.snp.updateConstraints { make in
+                    make.centerX.equalToSuperview().offset(30)
+                }
+                
+                self.view.layoutIfNeeded()
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) {
+                self.logoView.snp.updateConstraints { make in
+                    make.centerX.equalToSuperview()
+                }
+                
+                self.view.layoutIfNeeded()
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25) {
+                self.logoView.snp.updateConstraints { make in
+                    make.centerX.equalToSuperview().offset(-30)
+                }
+                
+                self.view.layoutIfNeeded()
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25) {
+                self.logoView.snp.updateConstraints { make in
+                    make.centerX.equalToSuperview()
+                }
+                
+                self.view.layoutIfNeeded()
+            }
+        }
     }
 }
 

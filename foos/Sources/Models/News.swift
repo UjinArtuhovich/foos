@@ -11,6 +11,6 @@ public struct News: Codable {
     public let title: String
     public let text: String
     public let id: Int
-    public let imageUrl: URL
+    public let imageUrl: String
     public let type: String 
 }

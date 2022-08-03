@@ -65,7 +65,7 @@ final public class TabBarView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        blurGradient.frame = .init(x: 0, y: -60, width: bounds.width, height: 60)
+        blurGradient.frame = .init(x: 0, y: -30, width: bounds.width, height: 30)
         
         let numSubviews = CGFloat(stackView.arrangedSubviews.count)
         let width = stackView.bounds.width - stackView.spacing * (numSubviews - 1)
@@ -81,7 +81,7 @@ final public class TabBarView: UIView {
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             blurGradient.colors = [
                 UIColor.Custom.backgroundMain.withAlphaComponent(0).cgColor,
-                UIColor.Custom.backgroundMain.cgColor
+                UIColor.Custom.backgroundMain.withAlphaComponent(0.5).cgColor
             ]
         }
     }
@@ -95,7 +95,7 @@ private extension TabBarView {
         blurGradient = .init()
         blurGradient.colors = [
             UIColor.Custom.backgroundMain.withAlphaComponent(0).cgColor,
-            UIColor.Custom.backgroundMain.cgColor
+            UIColor.Custom.backgroundMain.withAlphaComponent(0.5).cgColor
         ]
         
         layer.addSublayer(blurGradient)

@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import UIKit
 
 struct MainLoadingConstants {
-    static let loadingDuration = 3
+    static let loadingDuration: Double = 3
+    static let logoViewSize: CGFloat = 60
 }
