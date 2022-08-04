@@ -83,21 +83,21 @@ private extension MainViewController {
                 let store = store.scope(state: \.newsState, action: MainAction.news)
                 vc = NewsViewController(store: store)
                 
-            case .myLooks:
+            case .looks:
                 let store = store.scope(state: \.newsState, action: MainAction.news)
-                vc = NewsViewController(store: store)
+                vc = UIViewController()
                 
             case .shop:
                 let store = store.scope(state: \.newsState, action: MainAction.news)
-                vc = NewsViewController(store: store)
+                vc = UIViewController()
                 
             case .profile:
-                let store = store.scope(state: \.newsState, action: MainAction.news)
-                vc = NewsViewController(store: store)
+                let store = store.scope(state: \.profileState, action: MainAction.profile)
+                vc = ProfileViewController(store: store)
                  
             case .test:
                 let store = store.scope(state: \.newsState, action: MainAction.news)
-                vc = NewsViewController(store: store)
+                vc = UIViewController()
             }
             
             sectionsVC.append(vc)

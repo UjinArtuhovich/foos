@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 public struct MainState: Equatable {
     var newsState: NewsState = .init()
+    var profileState: ProfileState = .init()
     var settingsState: SettingsState?
     
     var route: MainAction.Route?
@@ -23,6 +24,7 @@ public enum MainAction: Equatable {
     case didTapSettingsBarButton
     
     case news(NewsAction)
+    case profile(ProfileAction)
     case settings(SettingsAction)
     case tabBar(TabBarView.Action)
     
@@ -32,7 +34,7 @@ public enum MainAction: Equatable {
     
     enum Section: Int, CaseIterable {
         case news
-        case myLooks
+        case looks
         case shop
         case profile
         case test
@@ -52,6 +54,13 @@ public let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine
         case .settings(.didTapBackButton):
             state.route = .none
             
+        case let .tabBar(.didTapSectionButton(section)):
+            guard let newSection = MainAction.Section(rawValue: section) else {
+                return .none
+            }
+            
+            state.section = newSection
+            
         default:
             break
         }
@@ -61,6 +70,11 @@ public let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine
     newsReducer.pullback(
         state: \.newsState,
         action: /MainAction.news,
+        environment: { _ in .init() }
+    ),
+    profileReducer.pullback(
+        state: \.profileState,
+        action: /MainAction.profile,
         environment: { _ in .init() }
     ),
     settingsReducer.optional().pullback(

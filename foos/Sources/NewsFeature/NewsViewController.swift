@@ -15,6 +15,10 @@ final public class NewsViewController: UIViewController {
     private let viewStore: ViewStore<NewsState, NewsAction>
     private var cancellables: Set<AnyCancellable> = []
     
+//    private lazy var tableViewDataSource = makeTableViewDataSource()
+//    private lazy var collectionViewDataSource = makeCollectionViewDataSource()
+    
+    private var collectionViewFlowLayout: UICollectionViewFlowLayout!
     private var collectionView: UICollectionView!
     private var tableView: UITableView!
     
@@ -30,6 +34,12 @@ final public class NewsViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        collectionViewFlowLayout.itemSize = .init(width: view.frame.width / NewsConstants.countOfStories, height: collectionView.frame.height)
     }
     
     // MARK: - Lifecycle
@@ -50,35 +60,102 @@ private extension NewsViewController {
     func setupUI() {
         view.backgroundColor = .Custom.backgroundMain
         
-        tableView = .init(frame: .zero, style: .grouped)
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
-        tableView.allowsSelection = false
-        tableView.showsVerticalScrollIndicator = false
-        tableView.dataSource = self
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsConstants.newsCellReuseId)
-        
-        view.addSubview(tableView)
-        
-        tableView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(5)
-            make.top.centerX.centerY.equalToSuperview()
-        }
+//        // MARK: - Setup CollectionView
+//        collectionViewFlowLayout = .init()
+//        collectionViewFlowLayout.scrollDirection = .horizontal
+//        collectionViewFlowLayout.sectionInset = .init(top: 0, left: 15, bottom: 0, right: 15)
+//        collectionViewFlowLayout.minimumLineSpacing = 15
+//
+//        collectionView = .init(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+//        collectionView.showsHorizontalScrollIndicator = false
+//        collectionView.backgroundColor = .clear
+//        collectionView.dataSource = makeCollectionViewDataSource()
+//        collectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: NewsConstants.storyCellReuseId)
+//
+//        view.addSubview(collectionView)
+//
+//        collectionView.snp.makeConstraints { make in
+//            make.top.centerX.equalToSuperview()
+//            make.leading.equalToSuperview().offset(5)
+//            make.height.equalToSuperview().dividedBy(5.5)
+//        }
+//
+//        // MARK: - Setup TableView
+//        tableView = .init(frame: .zero, style: .plain)
+//        tableView.backgroundColor = .clear
+//        tableView.separatorStyle = .none
+//        tableView.allowsSelection = false
+//        tableView.showsVerticalScrollIndicator = false
+//        tableView.dataSource = makeTableViewDataSource()
+//        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsConstants.newsCellReuseId)
+//
+//        view.addSubview(tableView)
+//
+//        tableView.snp.makeConstraints { make in
+//            make.top.equalTo(collectionView.snp.bottom).offset(10)
+//            make.leading.equalToSuperview().offset(5)
+//            make.centerX.equalToSuperview()
+//            make.bottom.equalToSuperview().offset(-5)
+//        }
     }
     
     func setupVS() {
+//        viewStore.publisher.newsDataSource
+//            .sink { [weak self] _ in
+//                self?.applyTableViewSnapshot()
+//            }
+//            .store(in: &cancellables)
+//        
+//        viewStore.publisher.storiesDataSource
+//            .sink { [weak self] _ in
+//                self?.applyCollectionViewSnapshot()
+//            }
+//            .store(in: &cancellables)
     }
 }
 
-// FIX: - Make DataSource()
-extension NewsViewController: UITableViewDataSource {
-    public func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        return 5
-    }
-
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsConstants.newsCellReuseId, for: indexPath) as? NewsTableViewCell else { return .init() }
-        cell.model = .init(title: "Fashion", text: "В этокаждого человека без исключения", id: 1, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/92/Etalage_van_modewinkel_-_Window_of_a_fashion_boutique_%286808272877%29.jpg", type: "summer")
-        return cell
-    }
-}
+//private extension NewsViewController {
+//    // MARK: - Setup TableView DataSource
+//    func makeTableViewDataSource() -> UITableViewDiffableDataSource<NewsState.Section, News> {
+//        .init(tableView: tableView) { tableView, indexPath, model in
+//            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsConstants.newsCellReuseId, for: indexPath) as? NewsTableViewCell else {
+//                return .init()
+//            }
+//
+//            cell.model = model
+//
+//            return cell
+//        }
+//    }
+//
+//    func applyTableViewSnapshot(animatingDifferences: Bool = false) {
+//        var snapshot = NSDiffableDataSourceSnapshot<NewsState.Section, News>()
+//
+//        snapshot.appendSections([.main])
+//        snapshot.appendItems(viewStore.newsDataSource)
+//
+//        tableViewDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+//    }
+//
+//    // MARK: - Setup CollectionView DataSource
+//    func makeCollectionViewDataSource() -> UICollectionViewDiffableDataSource<NewsState.Section, Story> {
+//        .init(collectionView: collectionView) { collectionView, indexPath, model in
+//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsConstants.storyCellReuseId, for: indexPath) as? StoryCollectionViewCell else {
+//                return .init()
+//            }
+//
+//            cell.model = model
+//
+//            return cell
+//        }
+//    }
+//
+//    func applyCollectionViewSnapshot(animatingDifferences: Bool = false) {
+//        var snapshot = NSDiffableDataSourceSnapshot<NewsState.Section, Story>()
+//
+//        snapshot.appendSections([.main])
+//        snapshot.appendItems(viewStore.storiesDataSource)
+//
+//        collectionViewDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+//    }
+//}

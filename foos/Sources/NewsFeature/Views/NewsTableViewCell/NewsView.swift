@@ -48,9 +48,9 @@ private extension NewsView {
     // MARK: - Private methods
     func commonInit() {
         newsImageView = .init()
-        newsImageView.backgroundColor = .Custom.accent
         newsImageView.clipsToBounds = true
         newsImageView.contentMode = .scaleAspectFill
+        newsImageView.layer.cornerRadius = Constants.imageCornerRadius
         
         addSubview(newsImageView)
         
@@ -102,6 +102,7 @@ private extension NewsView {
     struct Constants {
         static let hashtag = "#"
         static let typeCornerRadius: CGFloat = 7
+        static let imageCornerRadius: CGFloat = 10
         static let titleTextStyle = StringStyle([
             .font(.systemFont(ofSize: 24, weight: .bold)),
             .color(.black)
