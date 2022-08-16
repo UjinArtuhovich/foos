@@ -15,11 +15,8 @@ final public class NewsViewController: UIViewController {
     private let viewStore: ViewStore<NewsState, NewsAction>
     private var cancellables: Set<AnyCancellable> = []
     
-//    private lazy var tableViewDataSource = makeTableViewDataSource()
-//    private lazy var collectionViewDataSource = makeCollectionViewDataSource()
+    private lazy var dataSource = makeDataSource()
     
-    private var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    private var collectionView: UICollectionView!
     private var tableView: UITableView!
     
     // MARK: - Init
@@ -35,13 +32,7 @@ final public class NewsViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        collectionViewFlowLayout.itemSize = .init(width: view.frame.width / NewsConstants.countOfStories, height: collectionView.frame.height)
-    }
-    
+
     // MARK: - Lifecycle
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,20 +88,70 @@ private extension NewsViewController {
 //            make.centerX.equalToSuperview()
 //            make.bottom.equalToSuperview().offset(-5)
 //        }
+        tableView = .init(frame: .zero, style: .plain)
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.allowsSelection = false
+        tableView.isScrollEnabled = true
+        tableView.showsVerticalScrollIndicator = false
+        tableView.dataSource = makeDataSource()
+        tableView.register(NewsMainTableViewCell.self, forCellReuseIdentifier: NewsConstants.newsMainCellReuseId)
+        tableView.register(StoriesTableViewCell.self, forCellReuseIdentifier: NewsConstants.storiesCellReuseId)
+
+        view.addSubview(tableView)
+
+        tableView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(5)
+            make.top.bottom.centerX.equalToSuperview()
+        }
     }
     
     func setupVS() {
-//        viewStore.publisher.newsDataSource
-//            .sink { [weak self] _ in
-//                self?.applyTableViewSnapshot()
-//            }
-//            .store(in: &cancellables)
-//        
-//        viewStore.publisher.storiesDataSource
-//            .sink { [weak self] _ in
-//                self?.applyCollectionViewSnapshot()
-//            }
-//            .store(in: &cancellables)
+        viewStore.publisher.dataSource
+            .sink { [weak self] _ in
+                self?.applySnapshot()
+            }
+            .store(in: &cancellables)
+    }
+    
+    func makeDataSource() -> UITableViewDiffableDataSource<NewsState.Section, AnyHashable> {
+        .init(tableView: tableView) { tableView, indexPath, model in
+            if let newsData = model as? [News] {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsConstants.newsMainCellReuseId, for: indexPath) as? NewsMainTableViewCell else {
+                    return .init()
+                }
+                
+                cell.model = newsData
+                
+                return cell
+                
+            } else if let storiesData = model as? [Story] {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsConstants.storiesCellReuseId, for: indexPath) as? StoriesTableViewCell else {
+                    return .init()
+                }
+                
+                cell.model = storiesData
+                
+                return cell
+                
+            } else {
+                return .none
+            }
+        }
+    }
+    
+    func applySnapshot(animatingDifferences: Bool = false) {
+        guard let dataSource = viewStore.dataSource else {
+            return
+        }
+        
+        var snapshot = NSDiffableDataSourceSnapshot<NewsState.Section, AnyHashable>()
+
+        snapshot.appendSections([.stories, .news])
+        snapshot.appendItems([dataSource.stories], toSection: .stories)
+        snapshot.appendItems([dataSource.news], toSection: .news)
+
+        self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }
 

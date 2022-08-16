@@ -17,8 +17,8 @@ public struct NewsState: Equatable {
     }
     
     enum Section: Hashable {
-        case news
         case stories
+        case news
     }
     
     public init() {}
